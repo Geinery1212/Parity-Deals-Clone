@@ -8,15 +8,23 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { productDetailsSchema } from '@/schemas/products';
-import { createProduct } from '@/server/actions/products';
+import { createProduct, updateProduct } from '@/server/actions/products';
 import { toast } from 'sonner';
-import { title } from 'process';
 
 
-export function ProductDetailsForm() {
+export function ProductDetailsForm({ product }: {
+    product: {
+        id: string,
+        name: string,
+        description: string | null
+        url: string
+    }
+}) {
     const form = useForm<z.infer<typeof productDetailsSchema>>({
         resolver: zodResolver(productDetailsSchema),
-        defaultValues: {
+        defaultValues: product ? {
+            ...product, description: product?.description ?? ''
+        } : {
             name: '',
             url: '',
             description: ''
@@ -25,13 +33,14 @@ export function ProductDetailsForm() {
 
     async function onSubmit(values: z.infer<typeof productDetailsSchema>) {
         console.log(values);
-        const data = await createProduct(values);
+        const action = product == null ? createProduct : updateProduct.bind(null, product.id);
+        const data = await action(values);
 
         if (data?.message) {
             if (data.error) {
-                toast.error('Error');
+                toast.error(data.message);
             } else {
-                toast.success('Success');
+                toast.success(data.message);
             }
         }
     }
