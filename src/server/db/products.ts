@@ -47,7 +47,7 @@ async function getProductCountryGroupsInternal({ productId, userId }: { productI
 
 }
 
-export function getProducts(userId: string, { limit }: { limit?: number }) {
+export function getProducts(userId: string, { limit }: { limit?: number } = {}) {
     const cacheFn = dbCache(getProductsInternal, {
         tags: [getUserTag(userId, CACHE_TAGS.products)],
     });

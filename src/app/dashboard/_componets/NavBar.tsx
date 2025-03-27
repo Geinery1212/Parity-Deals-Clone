@@ -9,9 +9,9 @@ export function NavBar() {
                 <Link href={'/dashboard'} className="mr-auto">
                     <BrandLogo />
                 </Link>
-                <Link href={'dashboard/products'}>Products</Link>
-                <Link href={'dashboard/analytics'}>Analytics</Link>
-                <Link href={'dashboard/subscription'}>Subscription</Link>
+                <Link href={'/dashboard/products'}>Products</Link>
+                <Link href={'/dashboard/analytics'}>Analytics</Link>
+                <Link href={'/dashboard/subscription'}>Subscription</Link>
                 <UserButton/>
             </nav>
         </header>
