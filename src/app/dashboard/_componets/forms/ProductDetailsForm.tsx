@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 
 
 export function ProductDetailsForm({ product }: {
-    product: {
+    product?: {
         id: string,
         name: string,
         description: string | null
