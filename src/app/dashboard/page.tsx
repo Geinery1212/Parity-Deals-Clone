@@ -1,10 +1,10 @@
 import { getProducts } from '@/server/db/products';
 import { auth } from '@clerk/nextjs/server'
-import { NoProducts } from './_componets/NoProducts';
+import { NoProducts } from './_components/NoProducts';
 import { ArrowRightIcon, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { CardProduct, ProductGrid } from './_componets/ProductGrid';
+import { CardProduct, ProductGrid } from './_components/ProductGrid';
 
 export default async function DashboardPage() {
     const { userId, redirectToSignIn } = await auth();

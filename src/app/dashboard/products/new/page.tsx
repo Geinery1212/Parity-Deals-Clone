@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PageWithBackButton } from "../../_componets/PageWithBackButton";
-import { ProductDetailsForm } from "../../_componets/forms/ProductDetailsForm";
+import { PageWithBackButton } from "../../_components/PageWithBackButton";
+import { ProductDetailsForm } from "../../_components/forms/ProductDetailsForm";
 import { HasPermission } from "@/components/HasPermission";
 import { canCreateProduct } from "@/server/permissions";
 

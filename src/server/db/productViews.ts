@@ -70,89 +70,6 @@ export function getViewsByCountryChartData({
     })
 }
 
-export function getViewsByPPPChartData({
-    timezone,
-    productId,
-    userId,
-    interval,
-}: {
-    timezone: string
-    productId?: string
-    userId: string
-    interval: (typeof CHART_INTERVALS)[keyof typeof CHART_INTERVALS]
-}) {
-    const cacheFn = dbCache(getViewsByPPPChartDataInternal, {
-        tags: [
-            getUserTag(userId, CACHE_TAGS.productViews),
-            productId == null
-                ? getUserTag(userId, CACHE_TAGS.products)
-                : getIdTag(productId, CACHE_TAGS.products),
-            getGlobalTag(CACHE_TAGS.countries),
-            getGlobalTag(CACHE_TAGS.countryGroups),
-        ],
-    })
-
-    return cacheFn({
-        timezone,
-        productId,
-        userId,
-        interval,
-    })
-}
-
-export function getViewsByDayChartData({
-    timezone,
-    productId,
-    userId,
-    interval,
-}: {
-    timezone: string
-    productId?: string
-    userId: string
-    interval: (typeof CHART_INTERVALS)[keyof typeof CHART_INTERVALS]
-}) {
-    const cacheFn = dbCache(getViewsByDayChartDataInternal, {
-        tags: [
-            getUserTag(userId, CACHE_TAGS.productViews),
-            productId == null
-                ? getUserTag(userId, CACHE_TAGS.products)
-                : getIdTag(productId, CACHE_TAGS.products),
-        ],
-    })
-
-    return cacheFn({
-        timezone,
-        productId,
-        userId,
-        interval,
-    })
-}
-
-export async function createProductView({
-    productId,
-    countryId,
-    userId,
-}: {
-    productId: string
-    countryId?: string
-    userId: string
-}) {
-    const [newRow] = await db
-        .insert(ProductViewTable)
-        .values({
-            productId: productId,
-            visitedAt: new Date(),
-            countryId: countryId,
-        })
-        .returning({ id: ProductViewTable.id })
-
-    if (newRow != null) {
-        revalidateDbCache({ tag: CACHE_TAGS.productViews, userId, id: newRow.id })
-    }
-}
-
-
-
 async function getViewsByCountryChartDataInternal({
     timezone,
     productId,
@@ -187,7 +104,37 @@ async function getViewsByCountryChartDataInternal({
         .limit(25)
 }
 
-async function getViewsByPPPChartDataInternal({
+export function getViewsByChartData({
+    timezone,
+    productId,
+    userId,
+    interval,
+}: {
+    timezone: string
+    productId?: string
+    userId: string
+    interval: (typeof CHART_INTERVALS)[keyof typeof CHART_INTERVALS]
+}) {
+    const cacheFn = dbCache(getViewsByChartDataInternal, {
+        tags: [
+            getUserTag(userId, CACHE_TAGS.productViews),
+            productId == null
+                ? getUserTag(userId, CACHE_TAGS.products)
+                : getIdTag(productId, CACHE_TAGS.products),
+            getGlobalTag(CACHE_TAGS.countries),
+            getGlobalTag(CACHE_TAGS.countryGroups),
+        ],
+    })
+
+    return cacheFn({
+        timezone,
+        productId,
+        userId,
+        interval,
+    })
+}
+
+async function getViewsByChartDataInternal({
     timezone,
     productId,
     userId,
@@ -218,7 +165,7 @@ async function getViewsByPPPChartDataInternal({
     return await db
         .with(productViewSq)
         .select({
-            pppName: CountryGroupTable.name,
+            name: CountryGroupTable.name,
             views: count(productViewSq.visitedAt),
         })
         .from(CountryGroupTable)
@@ -226,8 +173,36 @@ async function getViewsByPPPChartDataInternal({
             productViewSq,
             eq(productViewSq.countryGroupId, CountryGroupTable.id)
         )
-        .groupBy(({ pppName }) => [pppName])
-        .orderBy(({ pppName }) => pppName)
+        .groupBy(({ name }) => [name])
+        .orderBy(({ name }) => name)
+}
+
+export function getViewsByDayChartData({
+    timezone,
+    productId,
+    userId,
+    interval,
+}: {
+    timezone: string
+    productId?: string
+    userId: string
+    interval: (typeof CHART_INTERVALS)[keyof typeof CHART_INTERVALS]
+}) {
+    const cacheFn = dbCache(getViewsByDayChartDataInternal, {
+        tags: [
+            getUserTag(userId, CACHE_TAGS.productViews),
+            productId == null
+                ? getUserTag(userId, CACHE_TAGS.products)
+                : getIdTag(productId, CACHE_TAGS.products),
+        ],
+    })
+
+    return cacheFn({
+        timezone,
+        productId,
+        userId,
+        interval,
+    })
 }
 
 async function getViewsByDayChartDataInternal({
@@ -269,6 +244,29 @@ async function getViewsByDayChartDataInternal({
         )
         .groupBy(({ date }) => [date])
         .orderBy(({ date }) => date)
+}
+
+export async function createProductView({
+    productId,
+    countryId,
+    userId,
+}: {
+    productId: string
+    countryId?: string
+    userId: string
+}) {
+    const [newRow] = await db
+        .insert(ProductViewTable)
+        .values({
+            productId: productId,
+            visitedAt: new Date(),
+            countryId: countryId,
+        })
+        .returning({ id: ProductViewTable.id })
+
+    if (newRow != null) {
+        revalidateDbCache({ tag: CACHE_TAGS.productViews, userId, id: newRow.id })
+    }
 }
 
 function getProductSubQuery(userId: string, productId: string | undefined) {

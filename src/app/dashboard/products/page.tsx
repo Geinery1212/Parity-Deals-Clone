@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button"
 import { PlusIcon } from "lucide-react"
 import Link from "next/link"
 import { getProducts } from "@/server/db/products"
-import { ProductGrid } from "../_componets/ProductGrid"
-import { NoProducts } from "../_componets/NoProducts"
+import { ProductGrid } from "../_components/ProductGrid"
+import { NoProducts } from "../_components/NoProducts"
 
 export default async function Products() {
     const { userId, redirectToSignIn } = await auth()

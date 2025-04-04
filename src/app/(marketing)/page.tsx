@@ -87,7 +87,7 @@ export default function HomePage() {
           <FooterLinkGroup
             title="Help"
             links={[
-              { label: "PPP Discounts", href: "#" },
+              { label: "Discounts", href: "#" },
               { label: "Discount API", href: "#" },
             ]}
           />
@@ -103,7 +103,7 @@ export default function HomePage() {
         <div className="flex flex-col gap-8">
           <FooterLinkGroup
             title="Features"
-            links={[{ label: "PPP Discounts", href: "#" }]}
+            links={[{ label: "Discounts", href: "#" }]}
           />
           <FooterLinkGroup
             title="Tools"

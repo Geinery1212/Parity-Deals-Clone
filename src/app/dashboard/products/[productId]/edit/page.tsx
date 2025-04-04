@@ -1,7 +1,7 @@
-import { CountryDiscountsForm } from "@/app/dashboard/_componets/forms/CountryDiscountsForm";
-import { ProductCustomizationForm } from "@/app/dashboard/_componets/forms/ProductCustomizationForm";
-import { ProductDetailsForm } from "@/app/dashboard/_componets/forms/ProductDetailsForm";
-import { PageWithBackButton } from "@/app/dashboard/_componets/PageWithBackButton";
+import { CountryDiscountsForm } from "@/app/dashboard/_components/forms/CountryDiscountsForm";
+import { ProductCustomizationForm } from "@/app/dashboard/_components/forms/ProductCustomizationForm";
+import { ProductDetailsForm } from "@/app/dashboard/_components/forms/ProductDetailsForm";
+import { PageWithBackButton } from "@/app/dashboard/_components/PageWithBackButton";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getProduct, getProductCountryGroups, getProductCustomization } from "@/server/db/products";
