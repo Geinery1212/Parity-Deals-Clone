@@ -16,7 +16,7 @@ export function ViewsByChart({
     const chartConfig = {
         views: {
             label: "Visitors",
-            color: "hsl(var(--accent))",
+            color: "var(--accent)",
         },
     }
 
@@ -47,7 +47,7 @@ export function ViewsByChart({
                     tickFormatter={formatCompactNumber}
                 />
                 <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="views" fill="var(--color-views)" />
+                <Bar dataKey="views" fill={chartConfig.views.color} />
             </BarChart>
         </ChartContainer>
     )
