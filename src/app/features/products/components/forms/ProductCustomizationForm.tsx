@@ -15,12 +15,12 @@ import {
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
-import { productCustomizationSchema } from "@/schemas/products"
-import { updateProductCustomization } from "@/server/actions/products"
+import { productCustomizationSchema } from "@/app/features/products/schemas/products"
+import { updateProductCustomization } from "@/app/features/products/server/actions/products"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { custom, z } from "zod"
+import { z } from "zod"
 
 export function ProductCustomizationForm({
     customization,

@@ -1,78 +1,10 @@
 import { db } from "@/drizzle/db";
 import { CountryGroupDiscountTable, ProductCustomizationTable, ProductTable } from "@/drizzle/schema";
-import { CACHE_TAGS, dbCache, getGlobalTag, getIdTag, getUserTag, revalidateDbCache } from "@/lib/cache";
+import { CACHE_TAGS, dbCache, getGlobalTag, getIdTag, revalidateDbCache } from "@/lib/cache";
 import { removeTrailingSlash } from "@/lib/utils";
-import { group } from "console";
-import { and, count, eq, inArray, sql } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import { BatchItem } from "drizzle-orm/batch";
 
-export function getProductCountryGroups({ productId, userId }: { productId: string, userId: string }) {
-    const cacheFn = dbCache(getProductCountryGroupsInternal, {
-        tags: [getIdTag(productId, CACHE_TAGS.products),
-        getGlobalTag(CACHE_TAGS.countries),
-        getGlobalTag(CACHE_TAGS.countryGroups)
-        ],
-    });
-    return cacheFn({ userId, productId });
-}
-async function getProductCountryGroupsInternal({ productId, userId }: { productId: string, userId: string }) {
-    const product = await getProduct({ id: productId, userId });
-    if (product == null) return [];
-    const data = await db.query.CountryGroupTable.findMany({
-        with: {
-            countries: {
-                columns: {
-                    name: true,
-                    code: true
-                }
-            },
-            countryGroupDiscounts: {
-                columns: {
-                    coupon: true,
-                    discountPercentage: true
-                },
-                where: (({ productId: id }, { eq }) => eq(id, productId)),
-                limit: 1
-            },
-        }
-    });
-    return data.map(group => {
-        return {
-            id: group.id,
-            name: group.name,
-            recommendedDiscountPercentage: group.recommendedDiscountPercentage,
-            countries: group.countries,
-            discount: group.countryGroupDiscounts.at(0)
-        }
-    })
-
-}
-
-export function getProducts(userId: string, { limit }: { limit?: number } = {}) {
-    const cacheFn = dbCache(getProductsInternal, {
-        tags: [getUserTag(userId, CACHE_TAGS.products)],
-    });
-    return cacheFn(userId, { limit });
-}
-function getProductsInternal(userId: string, { limit }: { limit?: number }) {
-    return db.query.ProductTable.findMany({
-        where: ({ clerkUserId }, { eq }) => eq(clerkUserId, userId),
-        orderBy: ({ createdAt }, { desc }) => desc(createdAt)
-    })
-}
-
-export function getProduct({ id, userId }: { id: string, userId: string }) {
-    const cacheFn = dbCache(getProductInternal, {
-        tags: [getIdTag(id, CACHE_TAGS.products)],
-    });
-    return cacheFn({ id, userId });
-}
-function getProductInternal({ id, userId }: { id: string, userId: string }) {
-    return db.query.ProductTable.findFirst({
-        where: ({ clerkUserId, id: idProduct }, { eq, and }) =>
-            and(eq(clerkUserId, userId), eq(idProduct, id))
-    });
-}
 
 export async function createProduct(data: typeof ProductTable.$inferInsert) {
     const [newProduct] = await db.insert(ProductTable).values(data).returning({ id: ProductTable.id, userId: ProductTable.clerkUserId });
@@ -107,20 +39,6 @@ export async function updateProduct(data: Partial<typeof ProductTable.$inferInse
             id
         })
     }
-
-    return rowCount > 0;
-}
-
-export async function deleteProduct({ id, userId }: { id: string, userId: string }) {
-    console.log('lalala === ' + id + '==== ' + userId)
-    const { rowCount } = await db.delete(ProductTable).where(and(eq(ProductTable.id, id), eq(ProductTable.clerkUserId, userId)));
-    if (rowCount > 0) [
-        revalidateDbCache({
-            tag: CACHE_TAGS.products,
-            userId: userId,
-            id: id
-        })
-    ]
 
     return rowCount > 0;
 }
@@ -181,38 +99,6 @@ export async function updateCountryDiscounts(
     })
 }
 
-export function getProductCustomization({
-    productId,
-    userId,
-}: {
-    productId: string
-    userId: string
-}) {
-    const cacheFn = dbCache(getProductCustomizationInternal, {
-        tags: [getIdTag(productId, CACHE_TAGS.products)],
-    })
-
-    return cacheFn({ productId, userId })
-}
-
-async function getProductCustomizationInternal({
-    userId,
-    productId,
-}: {
-    userId: string
-    productId: string
-}) {
-    const data = await db.query.ProductTable.findFirst({
-        where: ({ id, clerkUserId }, { and, eq }) =>
-            and(eq(id, productId), eq(clerkUserId, userId)),
-        with: {
-            productCustomization: true,
-        },
-    })
-
-    return data?.productCustomization
-}
-
 export async function updateProductCustomization(
     data: Partial<typeof ProductCustomizationTable.$inferInsert>,
     { productId, userId }: { productId: string; userId: string }
@@ -230,23 +116,6 @@ export async function updateProductCustomization(
         userId,
         id: productId,
     })
-}
-
-export function getProductCount(userId: string) {
-    const cacheFn = dbCache(getProductCountInternal, {
-        tags: [getUserTag(userId, CACHE_TAGS.products)],
-    })
-
-    return cacheFn(userId)
-}
-
-async function getProductCountInternal(userId: string) {
-    const counts = await db
-        .select({ productCount: count() })
-        .from(ProductTable)
-        .where(eq(ProductTable.clerkUserId, userId))
-
-    return counts[0]?.productCount ?? 0
 }
 
 export function getProductForBanner({
@@ -339,4 +208,105 @@ async function getProductForBannerInternal({
                     percentage: discount.discountPercentage,
                 },
     }
+}
+
+export function getProduct({ id, userId }: { id: string, userId: string }) {
+    const cacheFn = dbCache(getProductInternal, {
+        tags: [getIdTag(id, CACHE_TAGS.products)],
+    });
+    return cacheFn({ id, userId });
+}
+
+function getProductInternal({ id, userId }: { id: string, userId: string }) {
+    return db.query.ProductTable.findFirst({
+        where: ({ clerkUserId, id: idProduct }, { eq, and }) =>
+            and(eq(clerkUserId, userId), eq(idProduct, id))
+    });
+}
+
+export function getProductCountryGroups({ productId, userId }: { productId: string, userId: string }) {
+    const cacheFn = dbCache(getProductCountryGroupsInternal, {
+        tags: [getIdTag(productId, CACHE_TAGS.products),
+        getGlobalTag(CACHE_TAGS.countries),
+        getGlobalTag(CACHE_TAGS.countryGroups)
+        ],
+    });
+    return cacheFn({ userId, productId });
+}
+async function getProductCountryGroupsInternal({ productId, userId }: { productId: string, userId: string }) {
+    const product = await getProduct({ id: productId, userId });
+    if (product == null) return [];
+    const data = await db.query.CountryGroupTable.findMany({
+        with: {
+            countries: {
+                columns: {
+                    name: true,
+                    code: true
+                }
+            },
+            countryGroupDiscounts: {
+                columns: {
+                    coupon: true,
+                    discountPercentage: true
+                },
+                where: (({ productId: id }, { eq }) => eq(id, productId)),
+                limit: 1
+            },
+        }
+    });
+    return data.map(group => {
+        return {
+            id: group.id,
+            name: group.name,
+            recommendedDiscountPercentage: group.recommendedDiscountPercentage,
+            countries: group.countries,
+            discount: group.countryGroupDiscounts.at(0)
+        }
+    })
+
+}
+
+export function getProductCustomization({
+    productId,
+    userId,
+}: {
+    productId: string
+    userId: string
+}) {
+    const cacheFn = dbCache(getProductCustomizationInternal, {
+        tags: [getIdTag(productId, CACHE_TAGS.products)],
+    })
+
+    return cacheFn({ productId, userId })
+}
+
+async function getProductCustomizationInternal({
+    userId,
+    productId,
+}: {
+    userId: string
+    productId: string
+}) {
+    const data = await db.query.ProductTable.findFirst({
+        where: ({ id, clerkUserId }, { and, eq }) =>
+            and(eq(id, productId), eq(clerkUserId, userId)),
+        with: {
+            productCustomization: true,
+        },
+    })
+
+    return data?.productCustomization
+}
+export async function deleteProduct({ id, userId }: { id: string, userId: string }) {
+    console.log('lalala === ' + id + '==== ' + userId)
+    const { rowCount } = await db.delete(ProductTable).where(and(eq(ProductTable.id, id), eq(ProductTable.clerkUserId, userId)));
+    if (rowCount > 0) [
+        revalidateDbCache({
+            tag: CACHE_TAGS.products,
+            userId: userId,
+            id: id
+        })
+    ]
+
+    return rowCount > 0;
 }

@@ -1,3 +1,4 @@
+import { getProductCount } from "@/app/features/subscriptions/server/db/products"
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -19,14 +20,13 @@ import {
     createCancelSession,
     createCheckoutSession,
     createCustomerPortalSession,
-} from "@/server/actions/stripe"
-import { getProductCount } from "@/server/db/products"
-import { getProductViewCount } from "@/server/db/productViews"
-import { getUserSubscriptionTier } from "@/server/db/subscription"
+} from "@/app/features/subscriptions/server/actions/stripe"
 import { auth } from "@clerk/nextjs/server"
 import { startOfMonth } from "date-fns"
 import { CheckIcon } from "lucide-react"
 import { ReactNode } from "react"
+import { getProductViewCount } from "@/app/features/subscriptions/server/db/productViews"
+import { getUserSubscriptionTier } from "@/app/features/subscriptions/server/db/subscription"
 
 export default async function SubscriptionPage() {
     const { userId, redirectToSignIn } = await auth()

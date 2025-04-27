@@ -1,13 +1,12 @@
 'use server'
 
-import { productCountryDiscountsSchema, productCustomizationSchema, productDetailsSchema } from "@/schemas/products";
 import { auth } from "@clerk/nextjs/server";
-import { z } from "zod";
-import { createProduct as createProductDb, deleteProduct as deleteProductDb, updateProduct as updateProductDb, updateCountryDiscounts as updateCountryDiscountsDb, updateProductCustomization as updateProductCustomizationDb } from '@/server/db/products';
+import { deleteProduct as deleteProductDb } from '../db/products';
+import { createProduct as createProductDb, updateProduct as updateProductDb, updateCountryDiscounts as updateCountryDiscountsDb, updateProductCustomization as updateProductCustomizationDb } from '@/app/features/products/server/db/products';
+import { productCountryDiscountsSchema, productCustomizationSchema, productDetailsSchema } from "../../schemas/products";
+import { canCreateProduct, canCustomizeBanner } from "@/lib/permissions";
 import { redirect } from "next/navigation";
-import { error } from "console";
-import { canCreateProduct, canCustomizeBanner } from "../permissions";
-
+import { z } from "zod";
 
 export async function createProduct(
     unsafeData: z.infer<typeof productDetailsSchema>
@@ -38,22 +37,6 @@ export async function updateProduct(
         error: !isSuccess,
         message: isSuccess ? "Successfully updated your project" : errorMessage
     };
-}
-
-export async function deleteProduct(id: string) {
-    const { userId } = await auth();
-    const errorMessage = "There was an error deleting your product";
-
-    if (userId == null) {
-        return { error: true, message: errorMessage };
-    }
-    const isSuccess = await deleteProductDb({ id, userId });
-    return {
-        error: !isSuccess,
-        message: isSuccess ? "Successfully deleted your project" : errorMessage
-    };
-
-
 }
 
 export async function updateCountryDiscounts(
@@ -120,3 +103,20 @@ export async function updateProductCustomization(
 
     return { error: false, message: "Banner updated" }
 }
+
+export async function deleteProduct(id: string) {
+    const { userId } = await auth();
+    const errorMessage = "There was an error deleting your product";
+
+    if (userId == null) {
+        return { error: true, message: errorMessage };
+    }
+    const isSuccess = await deleteProductDb({ id, userId });
+    return {
+        error: !isSuccess,
+        message: isSuccess ? "Successfully deleted your project" : errorMessage
+    };
+
+
+}
+

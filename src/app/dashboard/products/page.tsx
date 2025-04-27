@@ -2,9 +2,9 @@ import { auth } from "@clerk/nextjs/server"
 import { Button } from "@/components/ui/button"
 import { PlusIcon } from "lucide-react"
 import Link from "next/link"
-import { getProducts } from "@/server/db/products"
-import { ProductGrid } from "../_components/ProductGrid"
-import { NoProducts } from "../_components/NoProducts"
+import { ProductGrid } from "@/app/features/products/components/ProductGrid"
+import { NoProducts } from "@/app/features/products/components/NoProducts"
+import { getProducts } from "@/app/features/analytics/server/db/products"
 
 export default async function Products() {
     const { userId, redirectToSignIn } = await auth()

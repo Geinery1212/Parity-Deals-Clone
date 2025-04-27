@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PageWithBackButton } from "../../_components/PageWithBackButton";
-import { ProductDetailsForm } from "../../_components/forms/ProductDetailsForm";
+import { PageWithBackButton } from "@/app/features/products/components/PageWithBackButton";
+import { ProductDetailsForm } from "@/app/features/products/components/forms/ProductDetailsForm";
 import { HasPermission } from "@/components/HasPermission";
-import { canCreateProduct } from "@/server/permissions";
+import { canCreateProduct } from "@/lib/permissions";
 
 export default function NewProductPage() {
     return (

@@ -1,11 +1,11 @@
-import { CountryDiscountsForm } from "@/app/dashboard/_components/forms/CountryDiscountsForm";
-import { ProductCustomizationForm } from "@/app/dashboard/_components/forms/ProductCustomizationForm";
-import { ProductDetailsForm } from "@/app/dashboard/_components/forms/ProductDetailsForm";
-import { PageWithBackButton } from "@/app/dashboard/_components/PageWithBackButton";
+import { CountryDiscountsForm } from "@/app/features/products/components/forms/CountryDiscountsForm";
+import { ProductCustomizationForm } from "@/app/features/products/components/forms/ProductCustomizationForm";
+import { ProductDetailsForm } from "@/app/features/products/components/forms/ProductDetailsForm";
+import { PageWithBackButton } from "@/app/features/products/components/PageWithBackButton";
+import { getProduct, getProductCountryGroups, getProductCustomization } from "@/app/features/products/server/db/products";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getProduct, getProductCountryGroups, getProductCustomization } from "@/server/db/products";
-import { canCustomizeBanner, canRemoveBranding } from "@/server/permissions";
+import { canCustomizeBanner, canRemoveBranding } from "@/lib/permissions";
 import { auth } from "@clerk/nextjs/server";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { notFound } from "next/navigation";

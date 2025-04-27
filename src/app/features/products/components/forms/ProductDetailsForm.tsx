@@ -7,8 +7,8 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { productDetailsSchema } from '@/schemas/products';
-import { createProduct, updateProduct } from '@/server/actions/products';
+import { productDetailsSchema } from '@/app/features/products/schemas/products';
+import { createProduct, updateProduct } from '@/app/features/products/server/actions/products';
 import { toast } from 'sonner';
 
 

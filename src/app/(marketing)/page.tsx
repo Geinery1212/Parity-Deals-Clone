@@ -7,7 +7,6 @@ import { subscriptionTiersInOrder } from "@/data/subscriptionTiers";
 import { formatCompactNumber } from "@/lib/formatter";
 import { cn } from "@/lib/utils";
 import { SignUpButton } from "@clerk/nextjs";
-import { link } from "fs";
 import { ArrowRightIcon, CheckIcon } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";

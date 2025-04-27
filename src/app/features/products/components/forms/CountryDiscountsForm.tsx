@@ -9,16 +9,15 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-// import { productCountryDiscountsSchema } from "@/schemas/products"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { productCountryDiscountsSchema } from "@/schemas/products"
-import { updateCountryDiscounts } from "@/server/actions/products"
+import { productCountryDiscountsSchema } from "@/app/features/products/schemas/products"
 import { toast } from "sonner"
+import { updateCountryDiscounts } from "@/app/features/products/server/actions/products"
 
 export function CountryDiscountsForm({
     productId,

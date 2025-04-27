@@ -5,14 +5,13 @@ import {
     getViewsByCountryChartData,
     getViewsByDayChartData,
     getViewsByChartData,
-} from "@/server/db/productViews"
-import { canAccessAnalytics } from "@/server/permissions"
+} from "@/app/features/products/server/db/productViews"
 import { auth } from "@clerk/nextjs/server"
 import { ChevronDownIcon, SearchCheck } from "lucide-react"
 
-import { ViewsByCountryChart } from "../_components/charts/ViewsByCountryChart"
-import { ViewsByChart } from "../_components/charts/ViewsByChart"
-import { ViewsByDayChart } from "../_components/charts/ViewsByDayChart"
+import { ViewsByCountryChart } from "@/app/features/analytics/components/charts/ViewsByCountryChart"
+import { ViewsByChart } from "@/app/features/analytics/components/charts/ViewsByChart"
+import { ViewsByDayChart } from "@/app/features/analytics/components/charts/ViewsByDayChart"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -22,17 +21,18 @@ import {
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { createURL } from "@/lib/utils"
-import { getProduct, getProducts } from "@/server/db/products"
-import { TimeZoneDropDownMenuItem } from "../_components/TimeZoneDropDownMenuItem"
+import { TimeZoneDropDownMenuItem } from "@/app/features/analytics/components/TimeZoneDropDownMenuItem"
+import { getProducts } from "@/app/features/analytics/server/db/products"
+import { canAccessAnalytics } from "@/lib/permissions"
 
 
 
 export default async function AnalyticsPage({
-    searchParams: rawSearchParams, 
+    searchParams: rawSearchParams,
 }: {
     searchParams: Promise<{ interval?: string; timezone?: string; productId?: string }>
 }) {
-    const searchParams = await rawSearchParams 
+    const searchParams = await rawSearchParams
 
     const { userId, redirectToSignIn } = await auth()
     if (userId == null) return redirectToSignIn()
