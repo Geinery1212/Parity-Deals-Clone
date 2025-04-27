@@ -5,13 +5,13 @@ import {
     getViewsByCountryChartData,
     getViewsByDayChartData,
     getViewsByChartData,
-} from "@/app/features/products/server/db/productViews"
+} from "@/features/products/server/db/productViews"
 import { auth } from "@clerk/nextjs/server"
 import { ChevronDownIcon, SearchCheck } from "lucide-react"
 
-import { ViewsByCountryChart } from "@/app/features/analytics/components/charts/ViewsByCountryChart"
-import { ViewsByChart } from "@/app/features/analytics/components/charts/ViewsByChart"
-import { ViewsByDayChart } from "@/app/features/analytics/components/charts/ViewsByDayChart"
+import { ViewsByCountryChart } from "@/features/analytics/components/charts/ViewsByCountryChart"
+import { ViewsByChart } from "@/features/analytics/components/charts/ViewsByChart"
+import { ViewsByDayChart } from "@/features/analytics/components/charts/ViewsByDayChart"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -21,8 +21,8 @@ import {
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { createURL } from "@/lib/utils"
-import { TimeZoneDropDownMenuItem } from "@/app/features/analytics/components/TimeZoneDropDownMenuItem"
-import { getProducts } from "@/app/features/analytics/server/db/products"
+import { TimeZoneDropDownMenuItem } from "@/features/analytics/components/TimeZoneDropDownMenuItem"
+import { getProducts } from "@/features/analytics/server/db/products"
 import { canAccessAnalytics } from "@/lib/permissions"
 
 

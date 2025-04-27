@@ -3,8 +3,8 @@ import { headers } from "next/headers"
 import { WebhookEvent } from "@clerk/nextjs/server"
 import { env } from "@/data/env/server"
 import Stripe from "stripe"
-import { createUserSubscription, getUserSubscription } from "@/app/features/subscriptions/server/db/subscription"
-import { deleteUser } from "@/app/features/users/server/db/users"
+import { createUserSubscription, getUserSubscription } from "@/features/subscriptions/server/db/subscription"
+import { deleteUser } from "@/features/users/server/db/users"
 
 const stripe = new Stripe(env.STRIPE_SECRET_KEY)
 export async function POST(req: Request) {

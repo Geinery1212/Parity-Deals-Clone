@@ -1,5 +1,5 @@
-import { getProductForBanner } from "@/app/features/products/server/db/products"
-import { createProductView } from "@/app/features/products/server/db/productViews"
+import { getProductForBanner } from "@/features/products/server/db/products"
+import { createProductView } from "@/features/products/server/db/productViews"
 import { Banner } from "@/components/Banner"
 import { env } from "@/data/env/server"
 import { canRemoveBranding, canShowDiscountBanner } from "@/lib/permissions"

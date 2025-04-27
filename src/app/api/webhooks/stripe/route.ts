@@ -1,4 +1,4 @@
-import { updateUserSubscription } from "@/app/features/subscriptions/server/db/subscription"
+import { updateUserSubscription } from "@/features/subscriptions/server/db/subscription"
 import { env } from "@/data/env/server"
 import { getTierByPriceId, subscriptionTiers } from "@/data/subscriptionTiers"
 import { UserSubscriptionTable } from "@/drizzle/schema"

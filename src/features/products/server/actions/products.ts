@@ -2,7 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { deleteProduct as deleteProductDb } from '../db/products';
-import { createProduct as createProductDb, updateProduct as updateProductDb, updateCountryDiscounts as updateCountryDiscountsDb, updateProductCustomization as updateProductCustomizationDb } from '@/app/features/products/server/db/products';
+import { createProduct as createProductDb, updateProduct as updateProductDb, updateCountryDiscounts as updateCountryDiscountsDb, updateProductCustomization as updateProductCustomizationDb } from '@/features/products/server/db/products';
 import { productCountryDiscountsSchema, productCustomizationSchema, productDetailsSchema } from "../../schemas/products";
 import { canCreateProduct, canCustomizeBanner } from "@/lib/permissions";
 import { redirect } from "next/navigation";

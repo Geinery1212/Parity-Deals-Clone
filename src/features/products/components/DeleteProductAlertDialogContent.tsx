@@ -12,7 +12,7 @@ import {
 
 import { useTransition } from "react"
 import { toast } from "sonner"
-import { deleteProduct } from "@/app/features/products/server/actions/products"
+import { deleteProduct } from "@/features/products/server/actions/products"
 
 export function DeleteProductAlertDialogContent({ id }: { id: string }) {
     const [isDeletePending, startDeleteTransition] = useTransition()

@@ -15,9 +15,9 @@ import { z } from "zod"
 import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { productCountryDiscountsSchema } from "@/app/features/products/schemas/products"
+import { productCountryDiscountsSchema } from "@/features/products/schemas/products"
 import { toast } from "sonner"
-import { updateCountryDiscounts } from "@/app/features/products/server/actions/products"
+import { updateCountryDiscounts } from "@/features/products/server/actions/products"
 
 export function CountryDiscountsForm({
     productId,

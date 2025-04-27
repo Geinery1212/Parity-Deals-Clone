@@ -1,8 +1,8 @@
-import { CountryDiscountsForm } from "@/app/features/products/components/forms/CountryDiscountsForm";
-import { ProductCustomizationForm } from "@/app/features/products/components/forms/ProductCustomizationForm";
-import { ProductDetailsForm } from "@/app/features/products/components/forms/ProductDetailsForm";
-import { PageWithBackButton } from "@/app/features/products/components/PageWithBackButton";
-import { getProduct, getProductCountryGroups, getProductCustomization } from "@/app/features/products/server/db/products";
+import { CountryDiscountsForm } from "@/features/products/components/forms/CountryDiscountsForm";
+import { ProductCustomizationForm } from "@/features/products/components/forms/ProductCustomizationForm";
+import { ProductDetailsForm } from "@/features/products/components/forms/ProductDetailsForm";
+import { PageWithBackButton } from "@/features/products/components/PageWithBackButton";
+import { getProduct, getProductCountryGroups, getProductCustomization } from "@/features/products/server/db/products";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { canCustomizeBanner, canRemoveBranding } from "@/lib/permissions";

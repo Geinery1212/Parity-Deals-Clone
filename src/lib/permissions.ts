@@ -1,6 +1,6 @@
-import { getProductCount } from "@/app/features/subscriptions/server/db/products";
-import { getProductViewCount } from "@/app/features/subscriptions/server/db/productViews";
-import { getUserSubscriptionTier } from "@/app/features/subscriptions/server/db/subscription";
+import { getProductCount } from "@/features/subscriptions/server/db/products";
+import { getProductViewCount } from "@/features/subscriptions/server/db/productViews";
+import { getUserSubscriptionTier } from "@/features/subscriptions/server/db/subscription";
 import { startOfMonth } from "date-fns";
 
 export async function canRemoveBranding(userId: string | null) {
